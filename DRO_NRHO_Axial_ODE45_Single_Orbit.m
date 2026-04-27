@@ -7,9 +7,9 @@ tspan_type = "open";    % Options "open" or "linspace"
                         % "open" - lets ODE pick the timesteps, may not allow perfect equal spaced in time arcs
                         % "linspace" - uses equal spaced timesteps, should perfectly break into equal space in time arcs
 
-Orbit = "Axial";          %Options "DRO", "NRHO", or "Axial"
+Orbit = "NRHO";          %Options "DRO", "NRHO", or "Axial"
 
-N_revs = 1;
+N_revs = 15;
 
 %********************* Parameters ***************************
 MU = 0.0121505856;                  % Mass parameter of the Earth-Moon system
@@ -67,7 +67,7 @@ for ii = 1:length(t)
     s_acc(ii,:) = AccCR3BP(si, MU, 1);
 end
 
-Reference = [s, s_acc]; %[x, y, z, vx, vy, vz, ax, ay, az]
+Reference = [t, s, s_acc]; %[t, x, y, z, vx, vy, vz, ax, ay, az]
 
 
 %*********************** Plotting *************************
@@ -225,7 +225,12 @@ fprintf('State error norm (nondimensional): %.6e\n', norm(state_error_nd));
 
 ODE45_Dataset = Reference;
 
-filename = sprintf('datasets/Multi_Orbit_%s_Dataset.mat', Orbit);
+if N_revs == 1
+    filename = sprintf('datasets/Single_Orbit_%s_Dataset.mat', Orbit);
+else
+    filename = sprintf('datasets/Multi_Period_Orbit_%s_Dataset.mat', Orbit);
+end
+
 save(filename, 'ODE45_Dataset')
 
 disp(['Workspace cleared, ', filename, ' saved.'])
