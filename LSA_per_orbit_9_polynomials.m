@@ -241,6 +241,30 @@ for o = 1:length(orbits)
 
     fprintf('\nSaved:\n%s\n%s\n', output_file_mat, output_file_csv);
 
+
+    % ============================================================
+    % Plot settings
+    % ============================================================
+
+    set(groot, 'defaultAxesFontName', 'Times New Roman')
+    set(groot, 'defaultTextFontName', 'Times New Roman')
+    set(groot, 'defaultLegendFontName', 'Times New Roman')
+    
+    fontName = 'Times New Roman';
+    
+    axisFontSize = 10;
+    labelFontSize = 10;
+    titleFontSize = 12;
+    legendFontSize = 12;
+    sgtitleFontSize = 14;
+    
+    lineWidth = 1.2;
+    markerSize = 6;
+    
+    set(groot, 'defaultAxesFontName', fontName)
+    set(groot, 'defaultTextFontName', fontName)
+    set(groot, 'defaultLegendFontName', fontName)
+
     % ========================================================
     % CV RMSE plot
     % ========================================================
@@ -253,24 +277,28 @@ for o = 1:length(orbits)
 
     for c = 1:n_components
         plot(degrees, cv_rmse_by_component(c,:), ...
-            'LineWidth', 1.2, ...
+            'LineWidth', lineWidth, ...
             'DisplayName', component_names(c));
     end
-
+    
     for c = 1:n_components
         bd = best_degrees(c);
         plot(bd, cv_rmse_by_component(c,bd+1), 'o', ...
-            'MarkerSize', 6, ...
-            'LineWidth', 1.2, ...
+            'MarkerSize', markerSize, ...
+            'LineWidth', lineWidth, ...
             'HandleVisibility','off');
     end
-
-    xlabel('Polynomial Degree');
-    ylabel('Val RMSE [NDU]');
-    title(sprintf('%s Orbit', Orbit));
-
+    
+    xlabel('Polynomial Degree', 'FontSize', labelFontSize);
+    ylabel('Val RMSE [NDU]', 'FontSize', labelFontSize);
+    title(sprintf('%s Orbit', Orbit), 'FontSize', titleFontSize);
+    
+    set(gca, 'FontSize', axisFontSize, 'FontName', fontName);
+    
     if o == 1
-        legend('Location','eastoutside');
+        legend('Location','eastoutside', ...
+               'FontSize', legendFontSize, ...
+               'FontName', fontName);
     end
 end
 
@@ -286,7 +314,10 @@ disp("Saved RMSE summary table:");
 disp(RMSE_Summary);
 
 set(gcf,'color','w');
-sgtitle('Best-Fit Polynomial Degree Selection using 5-Fold Cross-Validation');
+
+sgtitle('Best-Fit Polynomial Degree Selection using 5-Fold Cross-Validation', ...
+        'FontName', fontName, ...
+        'FontSize', sgtitleFontSize);
 
 saveas(gcf, "LSA/All_Orbits_CV_RMSE_vs_Degree.png");
 

@@ -138,6 +138,26 @@ fprintf('Acceleration error mean : %.6e km/s^2\n', mean(acc_error_kms2));
 fprintf('Acceleration RMSE       : %.6e km/s^2\n', acceleration_rmse_kms2);
 
 % ============================================================
+% Plot settings
+% ============================================================
+
+fontName = 'Times New Roman';
+
+axisFontSize = 14;
+labelFontSize = 14;
+titleFontSize = 20;
+legendFontSize = 14;
+
+lineWidth = 1.5;
+markerSizeInit = 8;
+markerSizeFinal = 10;
+
+set(groot, 'defaultAxesFontName', fontName)
+set(groot, 'defaultTextFontName', fontName)
+set(groot, 'defaultLegendFontName', fontName)
+
+
+% ============================================================
 % Convert trajectory to km for plotting
 % ============================================================
 
@@ -191,12 +211,20 @@ view(2)
 xlim(cx + [-span_2d, span_2d]/2)
 ylim(cy + [-span_2d, span_2d]/2)
 
-xlabel('X [km]')
-ylabel('Y [km]')
-zlabel('Z [km]')
-title(sprintf('Trajectory Approximation (%s Orbit)', Orbit))
+xlabel('X [km]', 'FontSize', labelFontSize, 'FontName', fontName)
+ylabel('Y [km]', 'FontSize', labelFontSize, 'FontName', fontName)
+zlabel('Z [km]', 'FontSize', labelFontSize, 'FontName', fontName)
 
-legend([h1 h2], {'ODE45', 'LSA'}, 'Location', 'best')
+title(sprintf('Trajectory Approximation (%s Orbit)', Orbit), ...
+      'FontSize', titleFontSize, ...
+      'FontName', fontName)
+
+legend([h1 h2], {'ODE45', 'LSA'}, ...
+       'Location', 'best', ...
+       'FontSize', legendFontSize, ...
+       'FontName', fontName)
+
+set(gca, 'FontSize', axisFontSize, 'FontName', fontName)
 
 filename = fullfile(results_folder, sprintf('%s_2D_Trajectory_Comparison.png', Orbit));
 exportgraphics(gcf, filename, 'Resolution', 300);
@@ -226,12 +254,20 @@ zlim(cz + [-span_3d, span_3d]/2)
 
 daspect([1 1 1])
 
-xlabel('X [km]')
-ylabel('Y [km]')
-zlabel('Z [km]')
-title(sprintf('Trajectory Approximation (%s Orbit)', Orbit))
+xlabel('X [km]', 'FontSize', labelFontSize, 'FontName', fontName)
+ylabel('Y [km]', 'FontSize', labelFontSize, 'FontName', fontName)
+zlabel('Z [km]', 'FontSize', labelFontSize, 'FontName', fontName)
 
-legend([h1 h2], {'ODE45', 'LSA'}, 'Location', 'best')
+title(sprintf('Trajectory Approximation (%s Orbit)', Orbit), ...
+      'FontSize', titleFontSize, ...
+      'FontName', fontName)
+
+legend([h1 h2], {'ODE45', 'LSA'}, ...
+       'Location', 'best', ...
+       'FontSize', legendFontSize, ...
+       'FontName', fontName)
+
+set(gca, 'FontSize', axisFontSize, 'FontName', fontName)
 
 filename = fullfile(results_folder, sprintf('%s_3D_Trajectory_Comparison.png', Orbit));
 exportgraphics(gcf, filename, 'Resolution', 300);
@@ -245,9 +281,19 @@ plot(tau_plot, pos_error_km, 'b', 'LineWidth', 1.5)
 grid on
 set(gcf,'color','w')
 
-xlabel('Normalized Orbit Period')
-ylabel('Position Error [km]')
-title(sprintf('Position Error: LSA vs ODE45 (%s Orbit)', Orbit))
+xlabel('Normalized Orbit Period', ...
+       'FontSize', labelFontSize, ...
+       'FontName', fontName)
+
+ylabel('Position Error [km]', ...
+       'FontSize', labelFontSize, ...
+       'FontName', fontName)
+
+title(sprintf('Position Error: LSA vs ODE45 (%s Orbit)', Orbit), ...
+      'FontSize', titleFontSize, ...
+      'FontName', fontName)
+
+set(gca, 'FontSize', axisFontSize, 'FontName', fontName)
 
 xlim([0 1])
 

@@ -12,8 +12,8 @@ close all;
 %********************* Controls ***************************
 tspan_type = "open";        % Options: "open" or "linspace"
 Solver = "ode45";           % Options: "ode45", "ode78", "ode113"
-Orbit = "Axial";             % Options: "DRO", "NRHO", "Axial"
-N_revs = 100;                 % number of periods / revolutions want to be tested
+Orbit = "NRHO";             % Options: "DRO", "NRHO", "Axial"
+N_revs = 15;                 % number of periods / revolutions want to be tested
 
 %********************* Parameters ***************************
 MU = 0.0121505856;
@@ -98,6 +98,16 @@ Reference = [t, s, s_acc];
 % [t, x, y, z, vx, vy, vz, ax, ay, az]
 
 %*********************** Plotting *************************
+
+set(groot, 'defaultAxesFontName', 'Times New Roman')
+set(groot, 'defaultTextFontName', 'Times New Roman')
+set(groot, 'defaultLegendFontName', 'Times New Roman')
+
+axisFontSize = 16;
+labelFontSize = 16;
+titleFontSize = 16;
+legendFontSize = 16;
+
 x_km = s(:,1) * lstar;
 y_km = s(:,2) * lstar;
 z_km = s(:,3) * lstar;
@@ -119,9 +129,9 @@ span_2d = max(span_2d, min_span);
 span_3d = max(span_3d, min_span);
 
 if N_revs == 1
-    plot_title = sprintf('%s Single Orbit Propagation using %s', Orbit, Solver);
+    plot_title = sprintf('%s Single Orbit Propagation', Orbit);
 else
-    plot_title = sprintf('%s Long-Term Propagation using %s (%d Periods)', Orbit, Solver, N_revs);
+    plot_title = sprintf('%s Long-Term Propagation (%d Periods)', Orbit, N_revs);
 end
 
 %*********************** 2D Plot *************************
@@ -153,12 +163,16 @@ view(2)
 xlim(cx + [-span_2d, span_2d]/2)
 ylim(cy + [-span_2d, span_2d]/2)
 
-xlabel('X [km]')
-ylabel('Y [km]')
-zlabel('Z [km]')
-title(plot_title)
+xlabel('X [km]', 'FontSize', labelFontSize)
+ylabel('Y [km]', 'FontSize', labelFontSize)
+zlabel('Z [km]', 'FontSize', labelFontSize)
 
-legend([hInit hFinal], {'Initial state','Final state'})
+title(plot_title, 'FontSize', titleFontSize)
+
+legend([hInit hFinal], {'Initial state','Final state'}, ...
+       'FontSize', legendFontSize)
+
+set(gca, 'FontSize', axisFontSize)
 
 %*********************** 3D Plot *************************
 figure(2)
@@ -192,12 +206,44 @@ zlim(cz + [-span_3d, span_3d]/2)
 
 daspect([1 1 1])
 
-xlabel('X [km]')
-ylabel('Y [km]')
-zlabel('Z [km]')
-title(plot_title)
+xlabel('X [km]', 'FontSize', labelFontSize)
+ylabel('Y [km]', 'FontSize', labelFontSize)
+zlabel('Z [km]', 'FontSize', labelFontSize)
 
-legend([hInit hFinal], {'Initial state','Final state'})
+title(plot_title, 'FontSize', titleFontSize)
+
+legend([hInit hFinal], {'Initial state','Final state'}, ...
+       'FontSize', legendFontSize, ...
+       'Location', 'best')
+
+set(gca, 'FontSize', axisFontSize)
+
+
+%*********************** Save Plots *************************
+if ~exist('plots', 'dir')
+    mkdir('plots');
+end
+
+if N_revs == 1
+    plotname_2d = sprintf('plots/%s_single_orbit_2D.png', Orbit);
+    plotname_3d = sprintf('plots/%s_single_orbit_3D.png', Orbit);
+else
+    plotname_2d = sprintf('plots/%s_multi_orbit_2D.png', Orbit);
+    plotname_3d = sprintf('plots/%s_multi_orbit_3D.png', Orbit);
+end
+
+% Tighten 2D figure
+figure(1)
+set(gca, 'LooseInset', max(get(gca, 'TightInset'), 0.02))
+exportgraphics(gca, plotname_2d, 'Resolution', 300)
+
+% Tighten 3D figure
+figure(2)
+set(gca, 'LooseInset', max(get(gca, 'TightInset'), 0.02))
+exportgraphics(gca, plotname_3d, 'Resolution', 300)
+
+fprintf('\nSaved plots:\n%s\n%s\n', plotname_2d, plotname_3d);
+
 
 %*********************** Jacobi Constant *************************
 JC = CR3BP_JC(s(end,:), MU);

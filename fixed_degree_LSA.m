@@ -113,7 +113,7 @@ for d = 1:length(degrees)
     ylabel('Y [km]')
     zlabel('Z [km]')
     title(sprintf('Degree %d', degree))
-    legend('Location','best')
+    legend('Location','southoutside')
 end
 
 function DrawMoonCR3BP(MU, erad, prad)
